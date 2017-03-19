@@ -24,4 +24,8 @@ public class HomeController {
 		return about;
 	}
 	
+	@RequestMapping(value="/about",method = RequestMethod.GET)
+	public String about () {
+		return "about";
+	}
 }
