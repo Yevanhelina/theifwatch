@@ -1,41 +1,59 @@
 package com.metroteam.theifwatch.dao;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="COMMENTS")
 public class Comment {
 
-	private String comment;
-	private int id;
-	private int stationID;
-	private int usedID;
+	@Id
+	@GeneratedValue
+	private long id;
 	
-	public String getComment() {
-		return comment;
+	public String getStationId() {
+		return stationId;
 	}
 
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setStationId(String stationId) {
+		this.stationId = stationId;
 	}
 
-	public int getId() {
+	@Column(name="stationId")
+	private String stationId;
+	
+	@Column(name="text")
+	private String text;
+	
+	@Column(name="author")
+	private String author;
+
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	public int getStationID() {
-		return stationID;
+	public String getText() {
+		return text;
 	}
 
-	public void setStationID(int stationID) {
-		this.stationID = stationID;
+	public void setText(String text) {
+		this.text = text;
 	}
 
-	public int getUsedID() {
-		return usedID;
+	public String getAuthor() {
+		return author;
 	}
 
-	public void setUsedID(int usedID) {
-		this.usedID = usedID;
+	public void setAuthor(String author) {
+		this.author = author;
 	}
+	
+	
 }

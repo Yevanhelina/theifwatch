@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
@@ -12,7 +10,8 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
 			value="org.springframework.web.servlet.view.JstlView" />
 		<property name="prefix" value="/WEB-INF/views/" />
@@ -21,7 +20,8 @@
 	<mvc:annotation-driven />
 	<mvc:resources location="/WEB-INF/resources/" mapping="/resources/**"></mvc:resources>
 	<context:component-scan base-package="com.metroteam.theifwatch" />
-	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 		<property name="contentNegotiationManager">
 			<bean class="org.springframework.web.accept.ContentNegotiationManager">
 				<constructor-arg>
@@ -49,9 +49,9 @@
 			</list>
 		</property>
 	</bean>
-	
-	
-	
+
+
+
 	<mvc:annotation-driven />
 
 
@@ -85,24 +85,33 @@
 	</bean>
 	<bean id="userService" class="com.metroteam.theifwatch.dao.UserServiceImpl" />
 	<tx:annotation-driven />
-		<bean id="userServiceForSecurity" class="com.metroteam.theifwatch.dao.UserServiceImpl" />
+	<bean id="userServiceForSecurity" class="com.metroteam.theifwatch.dao.UserServiceImpl" />
 	<security:global-method-security
 		secured-annotations="enabled" jsr250-annotations="disabled"
 		pre-post-annotations="enabled" />
 	<security:http auto-config="true" use-expressions="true">
-		<security:intercept-url pattern="/**" access="permitAll"/>
-		<security:intercept-url pattern="/signup" method="GET" access="permitAll"/>
-		<security:intercept-url pattern="/signup" method="POST" access="permitAll"/>
-		<security:intercept-url pattern="/login" method="GET" access="permitAll"/>
-		<security:intercept-url pattern="/login" method="POST" access="permitAll"/>
+		<security:intercept-url pattern="/**" access="permitAll" />
+		<security:intercept-url pattern="/signup"
+			method="GET" access="permitAll" />
+		<security:intercept-url pattern="/signup"
+			method="POST" access="permitAll" />
+		<security:intercept-url pattern="/login"
+			method="GET" access="permitAll" />
+		<security:intercept-url pattern="/login"
+			method="POST" access="permitAll" />
 		<security:form-login login-page="/login" />
-		<security:logout logout-url="/logout"  invalidate-session="true"/>
-		<security:access-denied-handler error-page="/forbidden"/>
+		<security:logout logout-url="/logout"
+			invalidate-session="true" />
+		<security:access-denied-handler
+			error-page="/forbidden" />
+		<security:headers>
+			<security:frame-options policy="SAMEORIGIN" />
+		</security:headers>
 	</security:http>
 	<security:authentication-manager>
 		<security:authentication-provider
 			user-service-ref="userServiceForSecurity">
 		</security:authentication-provider>
 	</security:authentication-manager>
-	
+
 </beans>
