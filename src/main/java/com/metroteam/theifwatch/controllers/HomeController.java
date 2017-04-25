@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HomeController {
 
 	@RequestMapping(value="/",method = RequestMethod.GET)
-	public String index () {
-		return "index";
+	public String home () {
+		return "home";
+	}
+	@RequestMapping(value="/info",method = RequestMethod.GET)
+	public String info () {
+		return "info";
 	}
 	@RequestMapping(value="/aboutjson",method = RequestMethod.GET)
 	public @ResponseBody Map aboutJson () {

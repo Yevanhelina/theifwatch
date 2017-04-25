@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<mvc:annotation-driven />
+	<mvc:resources location="/WEB-INF/resources/" mapping="/resources/**"></mvc:resources>
+	<context:component-scan base-package="com.metroteam.theifwatch" />
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="contentNegotiationManager">
+			<bean class="org.springframework.web.accept.ContentNegotiationManager">
+				<constructor-arg>
+					<bean
+						class="org.springframework.web.accept.PathExtensionContentNegotiationStrategy">
+						<constructor-arg>
+							<map>
+								<entry key="json">
+									<util:constant
+										static-field="org.springframework.http.MediaType.APPLICATION_JSON_VALUE" />
+								</entry>
+							</map>
+						</constructor-arg>
+					</bean>
+				</constructor-arg>
+			</bean>
+		</property>
+
+		<property name="defaultViews">
+			<list>
+				<!-- JSON View -->
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	
+	
+	<mvc:annotation-driven />
+
+
+	<context:component-scan base-package="com.metroteam.theifwatch" />
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/springdb" />
+		<property name="username" value="root" />
+		<property name="password" value="12345" />
+		<property name="initialSize" value="5" />
+		<property name="maxTotal" value="10" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="com.metroteam.theifwatch.dao" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="userService" class="com.metroteam.theifwatch.dao.UserServiceImpl" />
+	<tx:annotation-driven />
+		<bean id="userServiceForSecurity" class="com.metroteam.theifwatch.dao.UserServiceImpl" />
+	<security:global-method-security
+		secured-annotations="enabled" jsr250-annotations="disabled"
+		pre-post-annotations="enabled" />
+	<security:http auto-config="true" use-expressions="true">
+		<security:intercept-url pattern="/**" access="permitAll"/>
+		<security:intercept-url pattern="/signup" method="GET" access="permitAll"/>
+		<security:intercept-url pattern="/signup" method="POST" access="permitAll"/>
+		<security:intercept-url pattern="/login" method="GET" access="permitAll"/>
+		<security:intercept-url pattern="/login" method="POST" access="permitAll"/>
+		<security:form-login login-page="/login" />
+		<security:logout logout-url="/logout"  invalidate-session="true"/>
+		<security:access-denied-handler error-page="/forbidden"/>
+	</security:http>
+	<security:authentication-manager>
+		<security:authentication-provider
+			user-service-ref="userServiceForSecurity">
+		</security:authentication-provider>
+	</security:authentication-manager>
+	
+</beans>
